@@ -1,0 +1,174 @@
+### ============================================
+### Custom Properties - APIs REST
+### ============================================
+###
+### Gestiona custom properties de tu organización
+### para agrupar y clasificar repositorios.
+### ============================================
+
+### Variables de configuración
+@token = {{$dotenv GITHUB_TOKEN}}
+@org = {{$dotenv GITHUB_ORG}}
+@baseUrl = https://api.github.com
+@apiVersion = 2022-11-28
+
+### =========================================
+### 📋 PASO 1: Consultar el esquema existente
+### =========================================
+
+### Listar todos los custom properties definidos en la org
+GET {{baseUrl}}/orgs/{{org}}/properties/schema
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### =========================================
+### 🏗️ PASO 2: Crear custom properties
+### =========================================
+
+### Crear o actualizar custom properties en la org
+### Este ejemplo crea 3 properties: environment, team y criticality
+PATCH {{baseUrl}}/orgs/{{org}}/properties/schema
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+Content-Type: application/json
+
+{
+  "properties": [
+    {
+      "property_name": "environment",
+      "value_type": "single_select",
+      "required": false,
+      "description": "Entorno del servicio",
+      "allowed_values": [
+        "production",
+        "staging",
+        "development"
+      ],
+      "values_editable_by": "org_and_repo_actors"
+    },
+    {
+      "property_name": "team",
+      "value_type": "single_select",
+      "required": false,
+      "description": "Equipo responsable del repositorio",
+      "allowed_values": [
+        "backend",
+        "frontend",
+        "platform",
+        "security",
+        "data"
+      ],
+      "values_editable_by": "org_and_repo_actors"
+    },
+    {
+      "property_name": "criticality",
+      "value_type": "single_select",
+      "required": false,
+      "description": "Nivel de criticidad del repositorio",
+      "allowed_values": [
+        "high",
+        "medium",
+        "low"
+      ],
+      "values_editable_by": "org_and_repo_actors"
+    }
+  ]
+}
+
+### =========================================
+### 🏷️ PASO 3: Asignar valores a repos
+### =========================================
+
+### Asignar custom properties a repos específicos (en lote)
+### Modifica los nombres de los repos según tu organización
+PATCH {{baseUrl}}/orgs/{{org}}/properties/values
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+Content-Type: application/json
+
+{
+  "repository_names": [
+    "repo-api-backend",
+    "repo-payments-service"
+  ],
+  "properties": [
+    {
+      "property_name": "environment",
+      "value": "production"
+    },
+    {
+      "property_name": "team",
+      "value": "backend"
+    },
+    {
+      "property_name": "criticality",
+      "value": "high"
+    }
+  ]
+}
+
+### Asignar properties a un segundo grupo de repos
+PATCH {{baseUrl}}/orgs/{{org}}/properties/values
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+Content-Type: application/json
+
+{
+  "repository_names": [
+    "repo-webapp-frontend",
+    "repo-admin-dashboard"
+  ],
+  "properties": [
+    {
+      "property_name": "environment",
+      "value": "production"
+    },
+    {
+      "property_name": "team",
+      "value": "frontend"
+    },
+    {
+      "property_name": "criticality",
+      "value": "medium"
+    }
+  ]
+}
+
+### =========================================
+### 🔍 PASO 4: Consultar custom properties
+### =========================================
+
+### Listar TODOS los repos de la org con sus custom properties
+GET {{baseUrl}}/orgs/{{org}}/properties/values?per_page=30
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### Filtrar repos por un custom property específico
+### Ejemplo: obtener solo repos con environment=production
+GET {{baseUrl}}/orgs/{{org}}/properties/values?repository_query=props.environment:production
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### Filtrar por múltiples properties
+### Ejemplo: repos de producción del equipo backend
+GET {{baseUrl}}/orgs/{{org}}/properties/values?repository_query=props.environment:production props.team:backend
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### =========================================
+### 📦 PASO 5: Consultar properties de un repo
+### =========================================
+
+### Obtener los custom properties de un repo específico
+@repo = nombre-del-repo
+GET {{baseUrl}}/repos/{{org}}/{{repo}}/properties/values
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
