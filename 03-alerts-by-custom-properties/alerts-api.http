@@ -1,0 +1,108 @@
+### ============================================
+### GHAS Alerts - APIs REST directas
+### ============================================
+###
+### Endpoints para consultar alertas de GHAS
+### de forma individual (sin filtro por properties).
+###
+### Para filtrado por custom properties, usa
+### el script get_alerts_by_properties.py
+### ============================================
+
+### Variables de configuración
+@token = {{$dotenv GITHUB_TOKEN}}
+@org = {{$dotenv GITHUB_ORG}}
+@repo = nombre-del-repo
+@baseUrl = https://api.github.com
+@apiVersion = 2022-11-28
+
+### =========================================
+### 🔍 Code Scanning
+### =========================================
+
+### Alertas de code scanning de toda la org
+### Filtros: state, severity, tool_name, sort, direction
+GET {{baseUrl}}/orgs/{{org}}/code-scanning/alerts
+    ?per_page=30
+    &state=open
+    &sort=created
+    &direction=desc
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### Alertas de code scanning de un repo
+### Filtros adicionales: ref (branch), tool_name, severity
+GET {{baseUrl}}/repos/{{org}}/{{repo}}/code-scanning/alerts
+    ?per_page=30
+    &state=open
+    &severity=critical
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### =========================================
+### 🔑 Secret Scanning
+### =========================================
+
+### Alertas de secret scanning de toda la org
+### Filtros: state, secret_type, resolution, sort, direction
+GET {{baseUrl}}/orgs/{{org}}/secret-scanning/alerts
+    ?per_page=30
+    &state=open
+    &sort=created
+    &direction=desc
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### Alertas de secret scanning de un repo
+GET {{baseUrl}}/repos/{{org}}/{{repo}}/secret-scanning/alerts
+    ?per_page=30
+    &state=open
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### =========================================
+### 📦 Dependabot
+### =========================================
+
+### Alertas de Dependabot de toda la org
+### Filtros: state, severity, ecosystem, package, scope, sort, direction
+GET {{baseUrl}}/orgs/{{org}}/dependabot/alerts
+    ?per_page=30
+    &state=open
+    &sort=created
+    &direction=desc
+    &severity=critical
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### Alertas de Dependabot de un repo
+GET {{baseUrl}}/repos/{{org}}/{{repo}}/dependabot/alerts
+    ?per_page=30
+    &state=open
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### =========================================
+### 📊 Filtrar repos por custom properties
+### (para luego obtener alertas de cada uno)
+### =========================================
+
+### Obtener repos con environment=production
+GET {{baseUrl}}/orgs/{{org}}/properties/values
+    ?repository_query=props.environment:production
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### Obtener repos de producción del equipo backend con criticidad alta
+GET {{baseUrl}}/orgs/{{org}}/properties/values
+    ?repository_query=props.environment:production props.team:backend props.criticality:high
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
