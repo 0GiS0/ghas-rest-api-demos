@@ -33,6 +33,12 @@ cd ghas-rest-api-demos
 cp .env.example .env
 ```
 
+Importante para fine-grained PATs:
+
+- Si vas a consultar una organización, crea el PAT con esa organización seleccionada en `Resource owner`.
+- No basta con crear el token desde las settings de un usuario que sea `Owner` de la org.
+- Si el `Resource owner` es tu cuenta personal en vez de la org, GitHub puede responder `[]` en `/orgs/{org}/repos` y `404` en los endpoints GHAS de organización.
+
 3. Instala las dependencias de Python (necesarias para las demos 3 y 4):
 
 ```bash
@@ -44,3 +50,15 @@ pip install -r requirements.txt
 - Los archivos `.http` son compatibles tanto con la extensión **REST Client** como con **Postman** para VS Code.
 - La API de GHAS **no soporta filtrado directo por custom properties**. La demo 3 muestra cómo resolver esto con un script que hace el filtrado en dos pasos.
 - Recuerda que los PATs son sensibles. **Nunca los subas a un repositorio**. Usa siempre el archivo `.env`.
+
+## 📸 Capturas
+
+Puedes pegar aquí un par de capturas para documentar la configuración correcta del PAT:
+
+### Captura 1: Resource owner del PAT
+
+![Resource owner del PAT](./docs/images/pat-setup/PAT%20-%20Resource%20owner.png)
+
+### Captura 2: Permisos del PAT
+
+![Permisos del PAT](./docs/images/pat-setup/PAT%20-%20Permissions.png)

@@ -28,17 +28,37 @@ Accept: application/vnd.github+json
 X-GitHub-Api-Version: {{apiVersion}}
 
 ### -----------------------------------------
+### ✅ Validar organización y repos disponibles
+### -----------------------------------------
+
+### Verificar que la organización existe
+GET {{baseUrl}}/orgs/{{org}}
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### Listar repos visibles de la organización
+### Si esta llamada devuelve [] o no aparece tu repo, las llamadas GHAS del repo darán 404.
+GET {{baseUrl}}/orgs/{{org}}/repos?per_page=10
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### -----------------------------------------
 ### 🔍 Code Scanning - Alertas
 ### -----------------------------------------
 
 ### Listar alertas de code scanning de la organización
+### Requiere ser owner o security manager de la organización.
+### GitHub devuelve 404 también cuando el recurso existe pero no tienes acceso suficiente.
 GET {{baseUrl}}/orgs/{{org}}/code-scanning/alerts?per_page=10&state=open
 Authorization: Bearer {{token}}
 Accept: application/vnd.github+json
 X-GitHub-Api-Version: {{apiVersion}}
 
 ### Listar alertas de code scanning de un repo específico
-@repo = nombre-del-repo
+### Sustituye este valor por un repo real de la organización con GHAS habilitado.
+@repo = juice-shop
 GET {{baseUrl}}/repos/{{org}}/{{repo}}/code-scanning/alerts?per_page=10&state=open
 Authorization: Bearer {{token}}
 Accept: application/vnd.github+json
@@ -56,12 +76,14 @@ X-GitHub-Api-Version: {{apiVersion}}
 ### -----------------------------------------
 
 ### Listar alertas de secret scanning de la organización
+### Requiere ser owner o security manager de la organización.
 GET {{baseUrl}}/orgs/{{org}}/secret-scanning/alerts?per_page=10&state=open
 Authorization: Bearer {{token}}
 Accept: application/vnd.github+json
 X-GitHub-Api-Version: {{apiVersion}}
 
 ### Listar alertas de secret scanning de un repo específico
+### Para repos públicos o sin secret scanning habilitado, GitHub puede responder 404.
 GET {{baseUrl}}/repos/{{org}}/{{repo}}/secret-scanning/alerts?per_page=10&state=open
 Authorization: Bearer {{token}}
 Accept: application/vnd.github+json
@@ -79,6 +101,7 @@ X-GitHub-Api-Version: {{apiVersion}}
 ### -----------------------------------------
 
 ### Listar alertas de Dependabot de la organización
+### Requiere ser owner o security manager de la organización.
 GET {{baseUrl}}/orgs/{{org}}/dependabot/alerts?per_page=10&state=open
 Authorization: Bearer {{token}}
 Accept: application/vnd.github+json
@@ -97,12 +120,3 @@ Authorization: Bearer {{token}}
 Accept: application/vnd.github+json
 X-GitHub-Api-Version: {{apiVersion}}
 
-### -----------------------------------------
-### 📊 Resumen de seguridad de la organización
-### -----------------------------------------
-
-### Obtener el resumen de seguridad (Security Overview)
-GET {{baseUrl}}/orgs/{{org}}/security-advisories?per_page=10
-Authorization: Bearer {{token}}
-Accept: application/vnd.github+json
-X-GitHub-Api-Version: {{apiVersion}}

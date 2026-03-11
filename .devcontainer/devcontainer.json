@@ -1,0 +1,22 @@
+{
+  "name": "🛡️ GHAS REST API Demos",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "humao.rest-client",
+        "Postman.postman-for-vscode"
+      ],
+      "settings": {
+        "rest-client.environmentVariables": {
+          "$shared": {}
+        }
+      }
+    }
+  },
+  "postCreateCommand": "pip install -r requirements.txt",
+  "remoteUser": "vscode"
+}
