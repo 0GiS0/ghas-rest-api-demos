@@ -6,7 +6,7 @@ opcionalmente filtradas por custom properties.
 
 Uso:
     python generate_report.py
-    python generate_report.py --property environment --value production
+    python generate_report.py --property application_type --value mobile
     python generate_report.py --output mi-reporte.pdf
 """
 
@@ -28,9 +28,9 @@ API_VERSION = "2022-11-28"
 
 
 def get_headers():
-    token = os.getenv("GITHUB_TOKEN")
+    token = os.getenv("GITHUB_TOKEN_DEMO_04")
     if not token:
-        print("Error: GITHUB_TOKEN no configurado en .env")
+        print("Error: GITHUB_TOKEN_DEMO_04 no configurado en .env")
         sys.exit(1)
     return {
         "Authorization": f"Bearer {token}",

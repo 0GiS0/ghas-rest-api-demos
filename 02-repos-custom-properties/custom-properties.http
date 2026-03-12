@@ -7,7 +7,7 @@
 ### ============================================
 
 ### Variables de configuración
-@token = {{$dotenv GITHUB_TOKEN}}
+@token = {{$dotenv GITHUB_TOKEN_DEMO_02}}
 @org = {{$dotenv GITHUB_ORG}}
 @baseUrl = https://api.github.com
 @apiVersion = 2022-11-28
@@ -27,7 +27,7 @@ X-GitHub-Api-Version: {{apiVersion}}
 ### =========================================
 
 ### Crear o actualizar custom properties en la org
-### Este ejemplo crea 3 properties: environment, team y criticality
+### Este ejemplo crea 2 properties: application_type y mobile_platform
 PATCH {{baseUrl}}/orgs/{{org}}/properties/schema
 Authorization: Bearer {{token}}
 Accept: application/vnd.github+json
@@ -37,40 +37,25 @@ Content-Type: application/json
 {
   "properties": [
     {
-      "property_name": "environment",
+      "property_name": "application_type",
       "value_type": "single_select",
       "required": false,
-      "description": "Entorno del servicio",
+      "description": "Tipo de aplicacion del repositorio",
       "allowed_values": [
-        "production",
-        "staging",
-        "development"
+        "mobile",
+        "web",
+        "desktop"
       ],
       "values_editable_by": "org_and_repo_actors"
     },
     {
-      "property_name": "team",
+      "property_name": "mobile_platform",
       "value_type": "single_select",
       "required": false,
-      "description": "Equipo responsable del repositorio",
+      "description": "Plataforma de la app movil. Dejala vacia para repos web o desktop",
       "allowed_values": [
-        "backend",
-        "frontend",
-        "platform",
-        "security",
-        "data"
-      ],
-      "values_editable_by": "org_and_repo_actors"
-    },
-    {
-      "property_name": "criticality",
-      "value_type": "single_select",
-      "required": false,
-      "description": "Nivel de criticidad del repositorio",
-      "allowed_values": [
-        "high",
-        "medium",
-        "low"
+        "android",
+        "ios"
       ],
       "values_editable_by": "org_and_repo_actors"
     }
@@ -82,7 +67,7 @@ Content-Type: application/json
 ### =========================================
 
 ### Asignar custom properties a repos específicos (en lote)
-### Modifica los nombres de los repos según tu organización
+### Ejemplo: apps moviles Android
 PATCH {{baseUrl}}/orgs/{{org}}/properties/values
 Authorization: Bearer {{token}}
 Accept: application/vnd.github+json
@@ -91,26 +76,22 @@ Content-Type: application/json
 
 {
   "repository_names": [
-    "repo-api-backend",
-    "repo-payments-service"
+    "ghas-demo-mobile-android-kotlin",
+    "ghas-demo-mobile-android-compose"
   ],
   "properties": [
     {
-      "property_name": "environment",
-      "value": "production"
+      "property_name": "application_type",
+      "value": "mobile"
     },
     {
-      "property_name": "team",
-      "value": "backend"
-    },
-    {
-      "property_name": "criticality",
-      "value": "high"
+      "property_name": "mobile_platform",
+      "value": "android"
     }
   ]
 }
 
-### Asignar properties a un segundo grupo de repos
+### Ejemplo: apps moviles iOS
 PATCH {{baseUrl}}/orgs/{{org}}/properties/values
 Authorization: Bearer {{token}}
 Accept: application/vnd.github+json
@@ -119,21 +100,65 @@ Content-Type: application/json
 
 {
   "repository_names": [
-    "repo-webapp-frontend",
-    "repo-admin-dashboard"
+    "ghas-demo-mobile-ios-swift",
+    "ghas-demo-mobile-ios-swiftui"
   ],
   "properties": [
     {
-      "property_name": "environment",
-      "value": "production"
+      "property_name": "application_type",
+      "value": "mobile"
     },
     {
-      "property_name": "team",
-      "value": "frontend"
+      "property_name": "mobile_platform",
+      "value": "ios"
+    }
+  ]
+}
+
+### Ejemplo: aplicaciones web
+PATCH {{baseUrl}}/orgs/{{org}}/properties/values
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+Content-Type: application/json
+
+{
+  "repository_names": [
+    "web-portal-clientes",
+    "web-admin-console"
+  ],
+  "properties": [
+    {
+      "property_name": "application_type",
+      "value": "web"
     },
     {
-      "property_name": "criticality",
-      "value": "medium"
+      "property_name": "mobile_platform",
+      "value": null
+    }
+  ]
+}
+
+### Ejemplo: aplicaciones de escritorio
+PATCH {{baseUrl}}/orgs/{{org}}/properties/values
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+Content-Type: application/json
+
+{
+  "repository_names": [
+    "desktop-pos-app",
+    "desktop-support-tool"
+  ],
+  "properties": [
+    {
+      "property_name": "application_type",
+      "value": "desktop"
+    },
+    {
+      "property_name": "mobile_platform",
+      "value": null
     }
   ]
 }
@@ -149,15 +174,15 @@ Accept: application/vnd.github+json
 X-GitHub-Api-Version: {{apiVersion}}
 
 ### Filtrar repos por un custom property específico
-### Ejemplo: obtener solo repos con environment=production
-GET {{baseUrl}}/orgs/{{org}}/properties/values?repository_query=props.environment:production
+### Ejemplo: obtener solo repos mobile
+GET {{baseUrl}}/orgs/{{org}}/properties/values?repository_query=props.application_type:mobile
 Authorization: Bearer {{token}}
 Accept: application/vnd.github+json
 X-GitHub-Api-Version: {{apiVersion}}
 
 ### Filtrar por múltiples properties
-### Ejemplo: repos de producción del equipo backend
-GET {{baseUrl}}/orgs/{{org}}/properties/values?repository_query=props.environment:production props.team:backend
+### Ejemplo: repos mobile Android
+GET {{baseUrl}}/orgs/{{org}}/properties/values?repository_query=props.application_type:mobile props.mobile_platform:android
 Authorization: Bearer {{token}}
 Accept: application/vnd.github+json
 X-GitHub-Api-Version: {{apiVersion}}
@@ -167,7 +192,7 @@ X-GitHub-Api-Version: {{apiVersion}}
 ### =========================================
 
 ### Obtener los custom properties de un repo específico
-@repo = nombre-del-repo
+@repo = ghas-demo-mobile-android-kotlin
 GET {{baseUrl}}/repos/{{org}}/{{repo}}/properties/values
 Authorization: Bearer {{token}}
 Accept: application/vnd.github+json

@@ -38,6 +38,7 @@ Importante para fine-grained PATs:
 - Si vas a consultar una organización, crea el PAT con esa organización seleccionada en `Resource owner`.
 - No basta con crear el token desde las settings de un usuario que sea `Owner` de la org.
 - Si el `Resource owner` es tu cuenta personal en vez de la org, GitHub puede responder `[]` en `/orgs/{org}/repos` y `404` en los endpoints GHAS de organización.
+- Este repo usa un PAT distinto por demo para que quede claro qué permisos necesita cada flujo.
 
 3. Instala las dependencias de Python (necesarias para las demos 3 y 4):
 
@@ -50,6 +51,15 @@ pip install -r requirements.txt
 - Los archivos `.http` son compatibles tanto con la extensión **REST Client** como con **Postman** para VS Code.
 - La API de GHAS **no soporta filtrado directo por custom properties**. La demo 3 muestra cómo resolver esto con un script que hace el filtrado en dos pasos.
 - Recuerda que los PATs son sensibles. **Nunca los subas a un repositorio**. Usa siempre el archivo `.env`.
+
+## 🔐 PATs por demo
+
+| Demo | Variable en `.env` | Uso | Permisos principales |
+|---|---|---|---|
+| 1 | `GITHUB_TOKEN_DEMO_01` | Validar autenticación y consultar GHAS directamente | `Code scanning alerts: Read`, `Secret scanning alerts: Read`, `Dependabot alerts: Read`, `Metadata: Read` |
+| 2 | `GITHUB_TOKEN_DEMO_02` | Crear y consultar custom properties | `Custom properties: Read and write` |
+| 3 | `GITHUB_TOKEN_DEMO_03` | Filtrar repos por properties y leer alertas GHAS | `Custom properties: Read`, `Code scanning alerts: Read`, `Secret scanning alerts: Read`, `Dependabot alerts: Read`, `Metadata: Read` |
+| 4 | `GITHUB_TOKEN_DEMO_04` | Generar el PDF con alertas y filtros por properties | mismos permisos que Demo 3 |
 
 ## 📸 Capturas
 

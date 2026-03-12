@@ -39,9 +39,9 @@ Los **fine-grained PATs** permiten controlar los permisos de forma granular y li
 > Importante: además del rol del usuario, el fine-grained PAT debe estar asociado a la organización correcta en **Resource owner**. Si el token está asociado a tu cuenta personal, no heredará automáticamente el acceso por ser owner de la org.
 
 6. Haz clic en **Generate token**
-7. **Copia el token** y guárdalo en tu archivo `.env`:
+7. **Copia el token** y guárdalo en tu archivo `.env` como `GITHUB_TOKEN_DEMO_01`:
    ```
-   GITHUB_TOKEN=github_pat_xxxxxxxxxxxxxxxxxxxxxxxx
+   GITHUB_TOKEN_DEMO_01=github_pat_xxxxxxxxxxxxxxxxxxxxxxxx
    ```
 
 ### Opción B: Classic PAT
@@ -66,6 +66,8 @@ Si prefieres un PAT clásico (más simple pero con permisos más amplios):
 ## 🧪 Probar la autenticación
 
 Una vez tengas el token, abre el archivo [`ghas-api.http`](./ghas-api.http) en VS Code y haz clic en **Send Request** encima de cualquier petición para verificar que funciona.
+
+Esta demo usa la variable `GITHUB_TOKEN_DEMO_01`.
 
 Empieza por este orden:
 

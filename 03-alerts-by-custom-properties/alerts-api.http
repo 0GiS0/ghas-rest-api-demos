@@ -10,9 +10,9 @@
 ### ============================================
 
 ### Variables de configuración
-@token = {{$dotenv GITHUB_TOKEN}}
+@token = {{$dotenv GITHUB_TOKEN_DEMO_03}}
 @org = {{$dotenv GITHUB_ORG}}
-@repo = nombre-del-repo
+@repo = ghas-demo-mobile-android-kotlin
 @baseUrl = https://api.github.com
 @apiVersion = 2022-11-28
 
@@ -36,7 +36,7 @@ X-GitHub-Api-Version: {{apiVersion}}
 GET {{baseUrl}}/repos/{{org}}/{{repo}}/code-scanning/alerts
     ?per_page=30
     &state=open
-    &severity=critical
+    &severity=high
 Authorization: Bearer {{token}}
 Accept: application/vnd.github+json
 X-GitHub-Api-Version: {{apiVersion}}
@@ -93,16 +93,16 @@ X-GitHub-Api-Version: {{apiVersion}}
 ### (para luego obtener alertas de cada uno)
 ### =========================================
 
-### Obtener repos con environment=production
+### Obtener repos mobile
 GET {{baseUrl}}/orgs/{{org}}/properties/values
-    ?repository_query=props.environment:production
+    ?repository_query=props.application_type:mobile
 Authorization: Bearer {{token}}
 Accept: application/vnd.github+json
 X-GitHub-Api-Version: {{apiVersion}}
 
-### Obtener repos de producción del equipo backend con criticidad alta
+### Obtener repos mobile Android
 GET {{baseUrl}}/orgs/{{org}}/properties/values
-    ?repository_query=props.environment:production props.team:backend props.criticality:high
+    ?repository_query=props.application_type:mobile props.mobile_platform:android
 Authorization: Bearer {{token}}
 Accept: application/vnd.github+json
 X-GitHub-Api-Version: {{apiVersion}}

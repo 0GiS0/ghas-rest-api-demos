@@ -5,9 +5,9 @@ Script que obtiene alertas de GitHub Advanced Security (GHAS) filtradas
 por custom properties de los repositorios.
 
 Uso:
-    python get_alerts_by_properties.py --property environment --value production
-    python get_alerts_by_properties.py --property team --value backend --state open
-    python get_alerts_by_properties.py --property environment --value production --output json
+    python get_alerts_by_properties.py --property application_type --value mobile
+    python get_alerts_by_properties.py --property application_type --value mobile --property mobile_platform --value android --state open
+    python get_alerts_by_properties.py --property application_type --value web --output json
 """
 
 import argparse
@@ -28,9 +28,9 @@ API_VERSION = "2022-11-28"
 
 
 def get_headers():
-    token = os.getenv("GITHUB_TOKEN")
+    token = os.getenv("GITHUB_TOKEN_DEMO_03")
     if not token:
-        print("❌ Error: GITHUB_TOKEN no está configurado en .env")
+        print("❌ Error: GITHUB_TOKEN_DEMO_03 no está configurado en .env")
         sys.exit(1)
     return {
         "Authorization": f"Bearer {token}",

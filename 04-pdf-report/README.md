@@ -9,20 +9,31 @@ Genera un reporte PDF con las alertas de GitHub Advanced Security de tu organiza
 pip install -r ../requirements.txt
 
 # Generar reporte de TODA la organización
-python generate_report.py
+python 04-pdf-report/generate_report.py
 
 # Generar reporte filtrado por custom properties
-python generate_report.py --property environment --value production
+python 04-pdf-report/generate_report.py --property application_type --value mobile
 
 # Filtrar por múltiples properties
-python generate_report.py --property environment --value production --property team --value backend
+python 04-pdf-report/generate_report.py --property application_type --value mobile --property mobile_platform --value android
 
 # Especificar nombre de archivo de salida
-python generate_report.py --output mi-reporte.pdf
+python 04-pdf-report/generate_report.py --output mi-reporte.pdf
 
 # Incluir alertas cerradas
-python generate_report.py --state open
+python 04-pdf-report/generate_report.py --state open
 ```
+
+Esta demo usa la variable `GITHUB_TOKEN_DEMO_04`.
+
+## ⚠️ Permisos necesarios
+
+- **Fine-grained PAT** en `GITHUB_TOKEN_DEMO_04`
+- `Custom properties: Read` si vas a filtrar por properties
+- `Code scanning alerts: Read`
+- `Secret scanning alerts: Read`
+- `Dependabot alerts: Read`
+- `Metadata: Read`
 
 ## 📄 Contenido del reporte
 

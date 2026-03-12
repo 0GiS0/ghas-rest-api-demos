@@ -12,7 +12,7 @@ La solución es un flujo de **dos pasos**:
 
 ```
 1. Obtener repos que cumplan el filtro de custom properties
-   GET /orgs/{org}/properties/values?repository_query=props.environment:production
+   GET /orgs/{org}/properties/values?repository_query=props.application_type:mobile
 
 2. Para cada repo filtrado, obtener sus alertas de GHAS
    GET /repos/{org}/{repo}/code-scanning/alerts
@@ -37,18 +37,29 @@ El script [`get_alerts_by_properties.py`](./get_alerts_by_properties.py) automat
 # Asegúrate de tener el .env configurado y las dependencias instaladas
 pip install -r ../requirements.txt
 
-# Obtener alertas de repos con environment=production
-python get_alerts_by_properties.py --property environment --value production
+# Obtener alertas de apps mobile
+python get_alerts_by_properties.py --property application_type --value mobile
 
-# Filtrar por equipo
-python get_alerts_by_properties.py --property team --value backend
+# Filtrar solo apps mobile Android
+python 03-alerts-by-custom-properties/get_alerts_by_properties.py --property application_type --value mobile --property mobile_platform --value android
 
 # Filtrar por múltiples properties (AND)
-python get_alerts_by_properties.py --property environment --value production --property team --value backend
+python 03-alerts-by-custom-properties/get_alerts_by_properties.py --property application_type --value mobile --property mobile_platform --value ios
 
 # Mostrar solo alertas abiertas (por defecto)
-python get_alerts_by_properties.py --property criticality --value high --state open
+python 03-alerts-by-custom-properties/get_alerts_by_properties.py --property application_type --value web --state open
 
 # Exportar resultado como JSON
-python get_alerts_by_properties.py --property environment --value production --output json
+python 03-alerts-by-custom-properties/get_alerts_by_properties.py --property application_type --value desktop --output json
 ```
+
+Esta demo usa la variable `GITHUB_TOKEN_DEMO_03`.
+
+## ⚠️ Permisos necesarios
+
+- **Fine-grained PAT** en `GITHUB_TOKEN_DEMO_03`
+- `Custom properties: Read` *a nivel de organización* para encontrar los repos filtrados
+- `Code scanning alerts: Read` para code scanning
+- `Secret scanning alerts: Read` para secret scanning
+- `Dependabot alerts: Read` para Dependabot
+- `Metadata: Read` para acceso base a repositorios
