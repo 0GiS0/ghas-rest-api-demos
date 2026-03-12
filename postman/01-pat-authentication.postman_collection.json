@@ -1,0 +1,511 @@
+{
+  "info": {
+    "_postman_id": "b3fddf29-0ab6-43ad-9d8b-fbbec2e30c01",
+    "name": "Demo 1 - PAT Authentication",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Coleccion equivalente a 01-pat-authentication/ghas-api.http"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.github.com"
+    },
+    {
+      "key": "apiVersion",
+      "value": "2022-11-28"
+    }
+  ],
+  "item": [
+    {
+      "name": "Verificar autenticacion",
+      "item": [
+        {
+          "name": "Obtener usuario autenticado",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_01}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/user",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user"
+              ]
+            },
+            "description": "Verifica que el token funciona y muestra el usuario autenticado."
+          },
+          "response": []
+        },
+        {
+          "name": "Verificar organizacion",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_01}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{GITHUB_ORG}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{GITHUB_ORG}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar repos visibles de la org",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_01}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{GITHUB_ORG}}/repos?per_page=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{GITHUB_ORG}}",
+                "repos"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Si devuelve [] o no aparece tu repo, las llamadas GHAS del repo darán 404."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Code Scanning",
+      "item": [
+        {
+          "name": "Listar alertas org",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_01}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{GITHUB_ORG}}/code-scanning/alerts?per_page=10&state=open",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{GITHUB_ORG}}",
+                "code-scanning",
+                "alerts"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "10"
+                },
+                {
+                  "key": "state",
+                  "value": "open"
+                }
+              ]
+            },
+            "description": "Requiere ser owner o security manager de la organizacion. GitHub devuelve 404 tambien cuando el recurso existe pero no tienes acceso suficiente."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar alertas repo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_01}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/repos/{{GITHUB_ORG}}/{{DEMO_01_REPO}}/code-scanning/alerts?per_page=10&state=open",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "repos",
+                "{{GITHUB_ORG}}",
+                "{{DEMO_01_REPO}}",
+                "code-scanning",
+                "alerts"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "10"
+                },
+                {
+                  "key": "state",
+                  "value": "open"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener alerta especifica",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_01}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/repos/{{GITHUB_ORG}}/{{DEMO_01_REPO}}/code-scanning/alerts/{{DEMO_01_CODE_SCANNING_ALERT_NUMBER}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "repos",
+                "{{GITHUB_ORG}}",
+                "{{DEMO_01_REPO}}",
+                "code-scanning",
+                "alerts",
+                "{{DEMO_01_CODE_SCANNING_ALERT_NUMBER}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Secret Scanning",
+      "item": [
+        {
+          "name": "Listar alertas org",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_01}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{GITHUB_ORG}}/secret-scanning/alerts?per_page=10&state=open",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{GITHUB_ORG}}",
+                "secret-scanning",
+                "alerts"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "10"
+                },
+                {
+                  "key": "state",
+                  "value": "open"
+                }
+              ]
+            },
+            "description": "Requiere ser owner o security manager de la organizacion."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar alertas repo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_01}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/repos/{{GITHUB_ORG}}/{{DEMO_01_REPO}}/secret-scanning/alerts?per_page=10&state=open",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "repos",
+                "{{GITHUB_ORG}}",
+                "{{DEMO_01_REPO}}",
+                "secret-scanning",
+                "alerts"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "10"
+                },
+                {
+                  "key": "state",
+                  "value": "open"
+                }
+              ]
+            },
+            "description": "Para repos publicos o sin secret scanning habilitado, GitHub puede responder 404."
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener alerta especifica",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_01}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/repos/{{GITHUB_ORG}}/{{DEMO_01_REPO}}/secret-scanning/alerts/{{DEMO_01_SECRET_SCANNING_ALERT_NUMBER}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "repos",
+                "{{GITHUB_ORG}}",
+                "{{DEMO_01_REPO}}",
+                "secret-scanning",
+                "alerts",
+                "{{DEMO_01_SECRET_SCANNING_ALERT_NUMBER}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Dependabot",
+      "item": [
+        {
+          "name": "Listar alertas org",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_01}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{GITHUB_ORG}}/dependabot/alerts?per_page=10&state=open",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{GITHUB_ORG}}",
+                "dependabot",
+                "alerts"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "10"
+                },
+                {
+                  "key": "state",
+                  "value": "open"
+                }
+              ]
+            },
+            "description": "Requiere ser owner o security manager de la organizacion."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar alertas repo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_01}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/repos/{{GITHUB_ORG}}/{{DEMO_01_REPO}}/dependabot/alerts?per_page=10&state=open",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "repos",
+                "{{GITHUB_ORG}}",
+                "{{DEMO_01_REPO}}",
+                "dependabot",
+                "alerts"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "10"
+                },
+                {
+                  "key": "state",
+                  "value": "open"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener alerta especifica",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_01}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/repos/{{GITHUB_ORG}}/{{DEMO_01_REPO}}/dependabot/alerts/{{DEMO_01_DEPENDABOT_ALERT_NUMBER}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "repos",
+                "{{GITHUB_ORG}}",
+                "{{DEMO_01_REPO}}",
+                "dependabot",
+                "alerts",
+                "{{DEMO_01_DEPENDABOT_ALERT_NUMBER}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

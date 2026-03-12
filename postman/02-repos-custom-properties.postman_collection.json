@@ -1,0 +1,434 @@
+{
+  "info": {
+    "_postman_id": "e6d85126-3ef0-4f86-9669-bd0450b8ff02",
+    "name": "Demo 2 - Repos Custom Properties",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Coleccion equivalente a 02-repos-custom-properties/custom-properties.http"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.github.com"
+    },
+    {
+      "key": "apiVersion",
+      "value": "2022-11-28"
+    }
+  ],
+  "item": [
+    {
+      "name": "Paso 1 - Consultar esquema",
+      "item": [
+        {
+          "name": "Listar schema de custom properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_02}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{GITHUB_ORG}}/properties/schema",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{GITHUB_ORG}}",
+                "properties",
+                "schema"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Paso 2 - Crear custom properties",
+      "item": [
+        {
+          "name": "Crear o actualizar schema",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_02}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"properties\": [\n    {\n      \"property_name\": \"application_type\",\n      \"value_type\": \"single_select\",\n      \"required\": false,\n      \"description\": \"Tipo de aplicacion del repositorio\",\n      \"allowed_values\": [\n        \"mobile\",\n        \"web\",\n        \"desktop\"\n      ],\n      \"values_editable_by\": \"org_and_repo_actors\"\n    },\n    {\n      \"property_name\": \"mobile_platform\",\n      \"value_type\": \"single_select\",\n      \"required\": false,\n      \"description\": \"Plataforma de la app movil. Dejala vacia para repos web o desktop\",\n      \"allowed_values\": [\n        \"android\",\n        \"ios\"\n      ],\n      \"values_editable_by\": \"org_and_repo_actors\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{GITHUB_ORG}}/properties/schema",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{GITHUB_ORG}}",
+                "properties",
+                "schema"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Paso 3 - Asignar valores a repos",
+      "item": [
+        {
+          "name": "Asignar valores a apps Android",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_02}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"repository_names\": [\n    \"ghas-demo-mobile-android-kotlin\",\n    \"ghas-demo-mobile-android-compose\"\n  ],\n  \"properties\": [\n    {\n      \"property_name\": \"application_type\",\n      \"value\": \"mobile\"\n    },\n    {\n      \"property_name\": \"mobile_platform\",\n      \"value\": \"android\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{GITHUB_ORG}}/properties/values",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{GITHUB_ORG}}",
+                "properties",
+                "values"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Asignar valores a apps iOS",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_02}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"repository_names\": [\n    \"ghas-demo-mobile-ios-swift\",\n    \"ghas-demo-mobile-ios-swiftui\"\n  ],\n  \"properties\": [\n    {\n      \"property_name\": \"application_type\",\n      \"value\": \"mobile\"\n    },\n    {\n      \"property_name\": \"mobile_platform\",\n      \"value\": \"ios\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{GITHUB_ORG}}/properties/values",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{GITHUB_ORG}}",
+                "properties",
+                "values"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Asignar valores a apps web",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_02}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"repository_names\": [\n    \"web-portal-clientes\",\n    \"web-admin-console\"\n  ],\n  \"properties\": [\n    {\n      \"property_name\": \"application_type\",\n      \"value\": \"web\"\n    },\n    {\n      \"property_name\": \"mobile_platform\",\n      \"value\": null\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{GITHUB_ORG}}/properties/values",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{GITHUB_ORG}}",
+                "properties",
+                "values"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Asignar valores a apps desktop",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_02}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"repository_names\": [\n    \"desktop-pos-app\",\n    \"desktop-support-tool\"\n  ],\n  \"properties\": [\n    {\n      \"property_name\": \"application_type\",\n      \"value\": \"desktop\"\n    },\n    {\n      \"property_name\": \"mobile_platform\",\n      \"value\": null\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{GITHUB_ORG}}/properties/values",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{GITHUB_ORG}}",
+                "properties",
+                "values"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Paso 4 - Consultar custom properties",
+      "item": [
+        {
+          "name": "Listar repos con custom properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_02}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{GITHUB_ORG}}/properties/values?per_page=30",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{GITHUB_ORG}}",
+                "properties",
+                "values"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "30"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filtrar repos mobile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_02}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{GITHUB_ORG}}/properties/values?repository_query=props.application_type:mobile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{GITHUB_ORG}}",
+                "properties",
+                "values"
+              ],
+              "query": [
+                {
+                  "key": "repository_query",
+                  "value": "props.application_type:mobile"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filtrar repos mobile Android",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_02}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{GITHUB_ORG}}/properties/values?repository_query=props.application_type:mobile props.mobile_platform:android",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{GITHUB_ORG}}",
+                "properties",
+                "values"
+              ],
+              "query": [
+                {
+                  "key": "repository_query",
+                  "value": "props.application_type:mobile props.mobile_platform:android"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Paso 5 - Consultar properties de un repo",
+      "item": [
+        {
+          "name": "Obtener custom properties de un repo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{GITHUB_TOKEN_DEMO_02}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.github+json"
+              },
+              {
+                "key": "X-GitHub-Api-Version",
+                "value": "{{apiVersion}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/repos/{{GITHUB_ORG}}/{{DEMO_02_REPO}}/properties/values",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "repos",
+                "{{GITHUB_ORG}}",
+                "{{DEMO_02_REPO}}",
+                "properties",
+                "values"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
