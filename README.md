@@ -35,7 +35,7 @@
 
 ## ✨ Características
 
-- **4 demos progresivas** que cubren desde autenticación hasta generación de reportes
+- **5 demos progresivas** que cubren desde autenticación hasta generación de reportes
 - Archivos `.http` listos para usar con la extensión REST Client de VS Code
 - **Colecciones de Postman** incluidas para fácil importación
 - Scripts en Python para filtrado avanzado y generación de PDFs
@@ -52,6 +52,7 @@
 | 2 | [Repos y Custom Properties](./02-repos-custom-properties/) | Agrupar repositorios usando custom properties |
 | 3 | [Alertas por Custom Properties](./03-alerts-by-custom-properties/) | Obtener alertas de GHAS filtradas por custom properties |
 | 4 | [Reporte en PDF](./04-pdf-report/) | Generar un reporte PDF con las alertas de GHAS |
+| 5 | [Autenticación con GitHub App](./05-github-app-authentication/) | Usar una GitHub App para autenticarse en lugar de PAT |
 
 ---
 
@@ -63,6 +64,7 @@
 - **Postman** - Colecciones alternativas para testing
 - **FPDF2** - Generación de reportes PDF
 - **python-dotenv** - Gestión de variables de entorno
+- **PyJWT** - Generación de tokens JWT para GitHub App
 
 ---
 
@@ -137,6 +139,7 @@ Los archivos `.http` de este repo están pensados para la extensión **REST Clie
 | 2 | `GITHUB_TOKEN_DEMO_02` | Crear y consultar custom properties | `Custom properties: Read and write` |
 | 3 | `GITHUB_TOKEN_DEMO_03` | Filtrar repos por properties y leer alertas GHAS | `Custom properties: Read`, `Code scanning alerts: Read`, `Secret scanning alerts: Read`, `Dependabot alerts: Read`, `Metadata: Read` |
 | 4 | `GITHUB_TOKEN_DEMO_04` | Generar el PDF con alertas y filtros por properties | mismos permisos que Demo 3 |
+| 5 | `GITHUB_APP_ID` + `GITHUB_APP_INSTALLATION_ID` | Autenticación con GitHub App | Ver [Demo 5](./05-github-app-authentication/) para permisos de la App |
 
 ---
 
@@ -156,6 +159,10 @@ ghas-rest-api-demos/
 │   └── README.md
 ├── 04-pdf-report/              # Demo 4: Reporte PDF
 │   ├── generate_report.py
+│   └── README.md
+├── 05-github-app-authentication/ # Demo 5: GitHub App Auth
+│   ├── ghas-api.http
+│   ├── get_installation_token.py
 │   └── README.md
 ├── docs/
 │   └── images/

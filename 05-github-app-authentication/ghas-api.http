@@ -1,0 +1,131 @@
+### ============================================
+### GHAS REST API - GitHub App Authentication
+### ============================================
+###
+### Usa estos ejemplos con la extensión REST Client
+### o Postman para VS Code.
+###
+### IMPORTANTE: Primero ejecuta get_installation_token.py
+### para obtener el token de instalación y cópialo abajo.
+###
+### Antes de empezar:
+### 1. Crea una GitHub App siguiendo el README.md
+### 2. Configura GITHUB_APP_ID y GITHUB_APP_INSTALLATION_ID en .env
+### 3. Ejecuta: python get_installation_token.py
+### 4. Copia el token generado en la variable @token de abajo
+### ============================================
+
+### Variables de configuración
+### IMPORTANTE: Reemplaza este token con el generado por get_installation_token.py
+### El token expira en 1 hora, tendrás que regenerarlo después
+@token = ghs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+@org = {{$dotenv GITHUB_ORG}}
+@repo = juice-shop
+@baseUrl = https://api.github.com
+@apiVersion = 2022-11-28
+
+### -----------------------------------------
+### 🤖 Información de la GitHub App
+### -----------------------------------------
+
+### Ver información de la App autenticada (requiere JWT, no installation token)
+### Esta llamada funcionará si usas el JWT directamente
+# GET {{baseUrl}}/app
+# Authorization: Bearer {{jwt}}
+# Accept: application/vnd.github+json
+# X-GitHub-Api-Version: {{apiVersion}}
+
+### -----------------------------------------
+### 📦 Repositorios accesibles
+### -----------------------------------------
+
+### Listar repositorios accesibles por la instalación
+### Esta es la forma más directa de ver qué repos puede acceder la App
+GET {{baseUrl}}/installation/repositories
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+###
+
+### Listar repos de la organización
+GET {{baseUrl}}/orgs/{{org}}/repos?per_page=10
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### -----------------------------------------
+### 🔍 Code Scanning - Alertas
+### -----------------------------------------
+
+### Obtener alertas de code scanning de un repositorio
+GET {{baseUrl}}/repos/{{org}}/{{repo}}/code-scanning/alerts
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+###
+
+### Obtener alertas de code scanning de la organización
+GET {{baseUrl}}/orgs/{{org}}/code-scanning/alerts?per_page=10
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### -----------------------------------------
+### 🔐 Secret Scanning - Alertas
+### -----------------------------------------
+
+### Obtener alertas de secret scanning de un repositorio
+GET {{baseUrl}}/repos/{{org}}/{{repo}}/secret-scanning/alerts
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+###
+
+### Obtener alertas de secret scanning de la organización
+GET {{baseUrl}}/orgs/{{org}}/secret-scanning/alerts?per_page=10
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### -----------------------------------------
+### 📦 Dependabot - Alertas
+### -----------------------------------------
+
+### Obtener alertas de Dependabot de un repositorio
+GET {{baseUrl}}/repos/{{org}}/{{repo}}/dependabot/alerts
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+###
+
+### Obtener alertas de Dependabot de la organización
+GET {{baseUrl}}/orgs/{{org}}/dependabot/alerts?per_page=10
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### -----------------------------------------
+### 📊 Security Overview
+### -----------------------------------------
+
+### Obtener resumen de seguridad de la organización
+GET {{baseUrl}}/orgs/{{org}}/security-managers
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
+
+### -----------------------------------------
+### ℹ️ Rate Limit
+### -----------------------------------------
+
+### Verificar rate limit (las GitHub Apps tienen límites más altos)
+### - Installation tokens: 5000 requests/hora (vs 5000 para PAT)
+### - Si la App tiene más de 20 repos: se añaden 50 requests/repo
+GET {{baseUrl}}/rate_limit
+Authorization: Bearer {{token}}
+Accept: application/vnd.github+json
+X-GitHub-Api-Version: {{apiVersion}}
